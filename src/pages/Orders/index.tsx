@@ -1,3 +1,5 @@
+/* eslint-disable array-callback-return */
+/* eslint-disable no-param-reassign */
 import React, { useEffect, useState } from 'react';
 import { Image } from 'react-native';
 
@@ -32,7 +34,13 @@ const Orders: React.FC = () => {
 
   useEffect(() => {
     async function loadOrders(): Promise<void> {
-      // Load orders from API
+      const response = await api.get<Food[]>('orders');
+
+      response.data.map(food => {
+        food.formattedPrice = formatValue(food.price);
+      });
+
+      setOrders(response.data);
     }
 
     loadOrders();
